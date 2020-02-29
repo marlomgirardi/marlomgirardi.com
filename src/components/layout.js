@@ -1,13 +1,16 @@
 import React from "react"
-import { Link } from "gatsby"
+import { MDXProvider } from "@mdx-js/react"
+import LocalizedLink from "./LocalizedLink"
+import MdxLink from "./MdxLink"
 
 import { rhythm, scale } from "../utils/typography"
 
-const Layout = ({ location, title, children }) => {
+const Layout = ({ location, title, children, lang }) => {
   const rootPath = `${__PATH_PREFIX__}/`
+  const rootWithLang = rootPath + lang
   let header
 
-  if (location.pathname === rootPath) {
+  if ([rootPath, rootWithLang].includes(location.pathname)) {
     header = (
       <h1
         style={{
@@ -16,7 +19,7 @@ const Layout = ({ location, title, children }) => {
           marginTop: 0,
         }}
       >
-        <Link
+        <LocalizedLink
           style={{
             boxShadow: `none`,
             textDecoration: `none`,
@@ -25,7 +28,7 @@ const Layout = ({ location, title, children }) => {
           to={`/`}
         >
           {title}
-        </Link>
+        </LocalizedLink>
       </h1>
     )
   } else {
@@ -36,7 +39,7 @@ const Layout = ({ location, title, children }) => {
           marginTop: 0,
         }}
       >
-        <Link
+        <LocalizedLink
           style={{
             boxShadow: `none`,
             textDecoration: `none`,
@@ -45,7 +48,7 @@ const Layout = ({ location, title, children }) => {
           to={`/`}
         >
           {title}
-        </Link>
+        </LocalizedLink>
       </h3>
     )
   }
@@ -59,7 +62,11 @@ const Layout = ({ location, title, children }) => {
       }}
     >
       <header>{header}</header>
-      <main>{children}</main>
+      <main>
+        <MDXProvider components={{ a: MdxLink }}>
+          {children}
+        </MDXProvider>
+      </main>
       <footer>
         © {new Date().getFullYear()}, Built with
         {` `}

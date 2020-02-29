@@ -1,20 +1,24 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 
 import Bio from "../components/bio"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../components/Layout"
+import SEO from "../components/SEO"
 import { rhythm, scale } from "../utils/typography"
 
 const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.mdx
   const siteTitle = data.site.siteMetadata.title
-  const { previous, next, slug } = pageContext
+  const { /*previous, next, */slug, locale } = pageContext
 
   return (
     <Layout location={location} title={siteTitle}>
       <SEO
+        lang={locale}
+        og={{
+          language: pageContext.ogLanguage
+        }}
         title={post.frontmatter.title}
         description={post.frontmatter.description || post.excerpt}
         slug={slug}
@@ -50,7 +54,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
         </footer>
       </article>
 
-      <nav>
+      {/* <nav>
         <ul
           style={{
             display: `flex`,
@@ -62,35 +66,38 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
         >
           <li>
             {previous && (
-              <Link to={`/posts${previous.fields.slug}`} rel="prev">
+              <Link to={previous.fields.slug} rel="prev">
                 ← {previous.frontmatter.title}
               </Link>
             )}
           </li>
           <li>
             {next && (
-              <Link to={`/posts${next.fields.slug}`} rel="next">
+              <Link to={next.fields.slug} rel="next">
                 {next.frontmatter.title} →
               </Link>
             )}
           </li>
         </ul>
-      </nav>
+      </nav> */}
     </Layout>
   )
 }
 
 export default BlogPostTemplate
 
-export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
+export const query = graphql`
+  query Post($locale: String!, $title: String!) {
     site {
       siteMetadata {
         title
         author
       }
     }
-    mdx(fields: { slug: { eq: $slug } }) {
+    mdx(
+      frontmatter: { title: { eq: $title } }
+      fields: { locale: { eq: $locale } }
+    ) {
       id
       excerpt(pruneLength: 160)
       body

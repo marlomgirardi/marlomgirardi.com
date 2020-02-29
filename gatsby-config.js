@@ -64,8 +64,8 @@ module.exports = {
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   date: edge.node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + 'posts' + edge.node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + 'posts' + edge.node.fields.slug,
+                  url: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                  guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
                   custom_elements: [{ "content:encoded": edge.node.body }],
                 })
               })
@@ -111,7 +111,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-html2amp',
       options: {
-        files: ['posts/**/index.html', 'index.html'],
+        files: ['**/index.html', 'index.html'],
         gaConfigPath: 'gaConfig.json',
         dist: 'public/amp',
         serviceWorker: {

@@ -9,3 +9,7 @@ import "typeface-montserrat"
 import "typeface-merriweather"
 
 import "prismjs/themes/prism.css"
+
+import WrapPageElement from "./src/components/WrapPageElement"
+
+export const wrapPageElement = WrapPageElement

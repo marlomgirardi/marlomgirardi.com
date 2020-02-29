@@ -5,26 +5,78 @@
  */
 
 const path = require(`path`)
-const { createFilePath } = require(`gatsby-source-filesystem`)
+const locales = require(`./config/i18n`)
+const {
+  localizedSlug,
+  findKey,
+  removeTrailingSlash,
+} = require(`./src/utils/nodeHelpers`)
+
+exports.onCreatePage = ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+
+  deletePage(page)
+
+  Object.keys(locales).map(lang => {
+    const localizedPath = locales[lang].default
+      ? page.path
+      : `${locales[lang].path}${page.path}`
+
+    return createPage({
+      ...page,
+      path: removeTrailingSlash(localizedPath),
+      context: {
+        ...page.context,
+        locale: lang,
+        dateFormat: locales[lang].dateFormat,
+        ogLanguage: locales[lang].ogLanguage,
+      },
+    })
+  })
+}
+
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+
+  if (node.internal.type === `Mdx`) {
+    const name = path.basename(node.fileAbsolutePath).replace(/\.mdx?$/, "");
+    const defaultKey = findKey(locales, (locale) => locale.default === true)
+    const lang = name.split(`.`)[1]
+    const isDefault = lang === defaultKey
+    const slug = name.replace(RegExp(`.${lang}$`), "");
+
+    createNodeField({ node, name: `locale`, value: lang })
+    createNodeField({ node, name: `isDefault`, value: isDefault })
+    createNodeField({ node, name: `slug`, value: slug })
+  }
+}
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const blogPost = path.resolve(`./src/templates/blog-post.js`)
+  const postTemplate = path.resolve(`./src/templates/blog-post.js`)
   const result = await graphql(
     `
       {
-        allMdx(
-          sort: { fields: [frontmatter___date], order: DESC }
+        blog: allFile(
+          filter: {
+            sourceInstanceName: { eq: "blog" }
+            ext: { in: [".md", ".mdx"] }
+          }
+          sort: { fields: [childMdx___frontmatter___date], order: DESC }
           limit: 1000
         ) {
           edges {
             node {
-              fields {
-                slug
-              }
-              frontmatter {
-                title
+              childMdx {
+                fields {
+                  slug
+                  locale
+                  isDefault
+                }
+                frontmatter {
+                  title
+                }
               }
             }
           }
@@ -38,33 +90,28 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   // Create blog posts pages.
-  const posts = result.data.allMdx.edges
+  const posts = result.data.blog.edges
 
-  posts.forEach((post, index) => {
+  posts.forEach(({ node: post }, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
     const next = index === 0 ? null : posts[index - 1].node
 
+    const title = post.childMdx.frontmatter.title
+    const slug = post.childMdx.fields.slug
+    const locale = post.childMdx.fields.locale
+    const isDefault = post.childMdx.fields.isDefault
+
     createPage({
-      path: `posts${post.node.fields.slug}`,
-      component: blogPost,
+      path: localizedSlug({ isDefault, locale, slug }),
+      component: postTemplate,
       context: {
-        slug: post.node.fields.slug,
+        slug,
         previous,
         next,
+        locale,
+        title,
       },
     })
   })
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
-
-  if (node.internal.type === `Mdx`) {
-    const value = createFilePath({ node, getNode })
-    createNodeField({
-      name: `slug`,
-      node,
-      value,
-    })
-  }
-}

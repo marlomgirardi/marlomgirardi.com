@@ -1,42 +1,47 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 
+import LocalizedLink from "../components/LocalizedLink"
 import Bio from "../components/bio"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../components/Layout"
+import SEO from "../components/SEO"
 import { rhythm } from "../utils/typography"
 
-const BlogIndex = ({ data, location }) => {
+const Index = ({ data, location, pageContext }) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMdx.edges
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <Layout location={location} title={siteTitle} lang={pageContext.locale}>
       <SEO
+        lang={pageContext.locale}
+        og={{
+          language: pageContext.ogLanguage
+        }}
         title="All posts"
         keywords={[`blog`, `gatsby`, `javascript`, `react`]}
       />
       <Bio />
-      {posts.map(({ node }) => {
-        const title = node.frontmatter.title || node.fields.slug
+      {posts.map(({ node: post }) => {
+        const title = post.frontmatter.title || post.fields.slug
         return (
-          <article key={node.fields.slug}>
+          <article key={post.fields.slug}>
             <header>
               <h3
                 style={{
                   marginBottom: rhythm(1 / 4),
                 }}
               >
-                <Link style={{ boxShadow: `none` }} to={`/posts${node.fields.slug}`}>
+                <LocalizedLink style={{ boxShadow: `none` }} to={post.fields.slug}>
                   {title}
-                </Link>
+                </LocalizedLink>
               </h3>
-              <small>{node.frontmatter.date}</small>
+              <small>{post.frontmatter.date}</small>
             </header>
             <section>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: node.frontmatter.description || node.excerpt,
+                  __html: post.frontmatter.description || post.excerpt,
                 }}
               />
             </section>
@@ -47,24 +52,28 @@ const BlogIndex = ({ data, location }) => {
   )
 }
 
-export default BlogIndex
+export default Index
 
-export const pageQuery = graphql`
-  query {
+export const query = graphql`
+  query Index($locale: String!, $dateFormat: String!) {
     site {
       siteMetadata {
         title
       }
     }
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(
+      filter: { fields: { locale: { eq: $locale } } }
+      sort: { fields: [frontmatter___date], order: DESC }
+    ) {
       edges {
         node {
           excerpt
           fields {
             slug
+            locale
           }
           frontmatter {
-            date(formatString: "MMMM DD, YYYY")
+            date(formatString: $dateFormat)
             title
             description
           }
