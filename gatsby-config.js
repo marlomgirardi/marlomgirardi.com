@@ -1,7 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: `Gatsby Starter Blog (AMP to PWA)`,
-    author: `Tomoyuki Kashiro`,
+    author: {
+      name: `Tomoyuki Kashiro`,
+      summary: `who lives and works in San Francisco building useful things.`,
+    },
     description: `A starter blog (AMP to PWA) demonstrating what Gatsby can do.`,
     siteUrl: `https://gatsby-starter-blog-amp-to-pwa.netlify.com/`,
     social: {
@@ -61,11 +64,19 @@ module.exports = {
           {
             serialize: ({ query: { site, allMdx } }) => {
               return allMdx.edges.map(edge => {
+                let url = site.siteMetadata.siteUrl
+
+                if (!edge.node.fields.isDefault) {
+                  url = url + "/" + edge.node.fields.locale
+                }
+
+                url = url + "/" + edge.node.fields.slug
+
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   date: edge.node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + edge.node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                  url,
+                  guid: url,
                   custom_elements: [{ "content:encoded": edge.node.body }],
                 })
               })
@@ -73,14 +84,17 @@ module.exports = {
             query: `
             {
               allMdx(
-                limit: 1000,
                 sort: { order: DESC, fields: [frontmatter___date] }
               ) {
                 edges {
                   node {
                     excerpt
                     body
-                    fields { slug }
+                    fields {
+                      slug
+                      locale
+                      isDefault
+                    }
                     frontmatter {
                       title
                       date
@@ -92,9 +106,9 @@ module.exports = {
           `,
             output: "/rss.xml",
             title: "Gatsby RSS Feed",
-          }
-        ]
-      }
+          },
+        ],
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,
@@ -109,17 +123,18 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-html2amp',
+      resolve: "gatsby-plugin-html2amp",
       options: {
-        files: ['**/index.html', 'index.html'],
-        gaConfigPath: 'gaConfig.json',
-        dist: 'public/amp',
+        files: ["**/index.html", "index.html"],
+        gaConfigPath: "gaConfig.json",
+        dist: "public/amp",
         serviceWorker: {
-          src: 'https://gatsby-starter-blog-amp-to-pwa.netlify.com/sw.js',
-          'data-iframe-src': 'https://gatsby-starter-blog-amp-to-pwa.netlify.com/amp-install-serviceworker.html',
-          layout: 'nodisplay'
-        }
-      }
+          src: "https://gatsby-starter-blog-amp-to-pwa.netlify.com/sw.js",
+          "data-iframe-src":
+            "https://gatsby-starter-blog-amp-to-pwa.netlify.com/amp-install-serviceworker.html",
+          layout: "nodisplay",
+        },
+      },
     },
     `gatsby-plugin-offline`,
     `gatsby-plugin-react-helmet`,

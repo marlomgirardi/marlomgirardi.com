@@ -16,7 +16,7 @@ const LocalizedLink = ({ to, ...props }) => {
   let link = path.replace(/\/$/, "")
 
   if (path.indexOf("/") !== 0) {
-    link = `/${link}`;
+    link = `/${link}`
   }
 
   return <Link {...props} to={link} />

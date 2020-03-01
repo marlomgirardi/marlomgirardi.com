@@ -35,15 +35,15 @@ exports.onCreatePage = ({ page, actions }) => {
   })
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
+exports.onCreateNode = ({ node, actions }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `Mdx`) {
-    const name = path.basename(node.fileAbsolutePath).replace(/\.mdx?$/, "");
-    const defaultKey = findKey(locales, (locale) => locale.default === true)
+    const name = path.basename(node.fileAbsolutePath).replace(/\.mdx?$/, "")
+    const defaultKey = findKey(locales, locale => locale.default === true)
     const lang = name.split(`.`)[1]
     const isDefault = lang === defaultKey
-    const slug = name.replace(RegExp(`.${lang}$`), "");
+    const slug = name.replace(RegExp(`.${lang}$`), "")
 
     createNodeField({ node, name: `locale`, value: lang })
     createNodeField({ node, name: `isDefault`, value: isDefault })
@@ -89,29 +89,39 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
-  // Create blog posts pages.
   const posts = result.data.blog.edges
 
-  posts.forEach(({ node: post }, index) => {
-    const previous = index === posts.length - 1 ? null : posts[index + 1].node
-    const next = index === 0 ? null : posts[index - 1].node
+  Object.keys(locales).map(lang => {
+    const localePosts = posts.filter(
+      ({ node: post }) => post.childMdx.fields.locale === lang
+    )
 
-    const title = post.childMdx.frontmatter.title
-    const slug = post.childMdx.fields.slug
-    const locale = post.childMdx.fields.locale
-    const isDefault = post.childMdx.fields.isDefault
+    if (localePosts.length === 0) {
+      console.warn("No posts found for:", lang)
+      return
+    }
 
-    createPage({
-      path: localizedSlug({ isDefault, locale, slug }),
-      component: postTemplate,
-      context: {
-        slug,
-        previous,
-        next,
-        locale,
-        title,
-      },
+    localePosts.forEach(({ node: post }, index) => {
+      const previous =
+        index === localePosts.length - 1 ? null : localePosts[index + 1].node
+      const next = index === 0 ? null : localePosts[index - 1].node
+
+      const title = post.childMdx.frontmatter.title
+      const slug = post.childMdx.fields.slug
+      const locale = post.childMdx.fields.locale
+      const isDefault = post.childMdx.fields.isDefault
+
+      createPage({
+        path: localizedSlug({ isDefault, locale, slug }),
+        component: postTemplate,
+        context: {
+          slug,
+          previous,
+          next,
+          locale,
+          title,
+        },
+      })
     })
   })
 }
-

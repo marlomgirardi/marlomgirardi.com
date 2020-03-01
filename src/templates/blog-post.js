@@ -5,19 +5,20 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import SEO from "../components/SEO"
-import { rhythm, scale } from "../utils/typography"
+import { rhythm } from "../utils/typography"
+import LocalizedLink from "../components/LocalizedLink"
 
 const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.mdx
   const siteTitle = data.site.siteMetadata.title
-  const { /*previous, next, */slug, locale } = pageContext
+  const { previous, next, slug, locale } = pageContext
 
   return (
     <Layout location={location} title={siteTitle}>
       <SEO
         lang={locale}
         og={{
-          language: pageContext.ogLanguage
+          language: pageContext.ogLanguage,
         }}
         title={post.frontmatter.title}
         description={post.frontmatter.description || post.excerpt}
@@ -28,20 +29,11 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
           <h1
             style={{
               marginTop: rhythm(1),
-              marginBottom: 0,
+              marginBottom: rhythm(1),
             }}
           >
             {post.frontmatter.title}
           </h1>
-          <p
-            style={{
-              ...scale(-1 / 5),
-              display: `block`,
-              marginBottom: rhythm(1),
-            }}
-          >
-            {post.frontmatter.date}
-          </p>
         </header>
         <MDXRenderer>{post.body}</MDXRenderer>
         <hr
@@ -54,7 +46,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
         </footer>
       </article>
 
-      {/* <nav>
+      <nav>
         <ul
           style={{
             display: `flex`,
@@ -66,20 +58,20 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
         >
           <li>
             {previous && (
-              <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
-              </Link>
+              <LocalizedLink to={previous.childMdx.fields.slug} rel="prev">
+                ← {previous.childMdx.frontmatter.title}
+              </LocalizedLink>
             )}
           </li>
           <li>
             {next && (
-              <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
-              </Link>
+              <LocalizedLink to={next.childMdx.fields.slug} rel="next">
+                {next.childMdx.frontmatter.title} →
+              </LocalizedLink>
             )}
           </li>
         </ul>
-      </nav> */}
+      </nav>
     </Layout>
   )
 }
@@ -87,23 +79,18 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
 export default BlogPostTemplate
 
 export const query = graphql`
-  query Post($locale: String!, $title: String!) {
+  query Post($locale: String!, $slug: String!) {
     site {
       siteMetadata {
         title
-        author
       }
     }
-    mdx(
-      frontmatter: { title: { eq: $title } }
-      fields: { locale: { eq: $locale } }
-    ) {
+    mdx(fields: { slug: { eq: $slug }, locale: { eq: $locale } }) {
       id
       excerpt(pruneLength: 160)
       body
       frontmatter {
         title
-        date(formatString: "MMMM DD, YYYY")
         description
       }
     }

@@ -7,9 +7,11 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "debug": "node --nolazy --inspect-brk node_modules/gatsby/dist/bin/gatsby develop",
     "serve": "gatsby serve",
+    "clean": "gatsby clean",
     "amp": "find public/amp -type f | xargs amphtml-validator",
     "test": "npm run amp"
   },
@@ -36,7 +38,6 @@
     "gatsby-remark-responsive-iframe": "^2.2.32",
     "gatsby-remark-smartypants": "^2.1.21",
     "gatsby-source-filesystem": "^2.1.48",
-    "gatsby-transformer-json": "^2.2.26",
     "gatsby-transformer-sharp": "^2.3.16",
     "prismjs": "^1.19.0",
     "react": "^16.13.0",
@@ -49,7 +50,8 @@
     "typography-theme-wordpress-2016": "^0.16.19"
   },
   "devDependencies": {
-    "amphtml-validator": "^1.0.30"
+    "amphtml-validator": "^1.0.30",
+    "prettier": "^1.19.1"
   },
   "homepage": "https://github.com/tomoyukikashiro/gatsby-starter-blog-amp-to-pwa#readme",
   "keywords": [

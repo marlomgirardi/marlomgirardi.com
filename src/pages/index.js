@@ -7,6 +7,8 @@ import Layout from "../components/Layout"
 import SEO from "../components/SEO"
 import { rhythm } from "../utils/typography"
 
+// TODO: parse keywords
+
 const Index = ({ data, location, pageContext }) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMdx.edges
@@ -16,10 +18,9 @@ const Index = ({ data, location, pageContext }) => {
       <SEO
         lang={pageContext.locale}
         og={{
-          language: pageContext.ogLanguage
+          language: pageContext.ogLanguage,
         }}
         title="All posts"
-        keywords={[`blog`, `gatsby`, `javascript`, `react`]}
       />
       <Bio />
       {posts.map(({ node: post }) => {
@@ -32,11 +33,13 @@ const Index = ({ data, location, pageContext }) => {
                   marginBottom: rhythm(1 / 4),
                 }}
               >
-                <LocalizedLink style={{ boxShadow: `none` }} to={post.fields.slug}>
+                <LocalizedLink
+                  style={{ boxShadow: `none` }}
+                  to={post.fields.slug}
+                >
                   {title}
                 </LocalizedLink>
               </h3>
-              <small>{post.frontmatter.date}</small>
             </header>
             <section>
               <p

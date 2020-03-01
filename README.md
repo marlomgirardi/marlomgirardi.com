@@ -13,10 +13,11 @@
 This is a Gatsby's blog start which is forked from [here](https://github.com/gatsbyjs/gatsby-starter-blog).
 
 ## AMP Feature
+
 This has AMP feature in addition to [one](https://github.com/gatsbyjs/gatsby-starter-blog).
 
-
 ## AMP to PWA
+
 This Also has AMP to PWA Strategy (a.k.a. AMP as entry point into your PWA). Please check [original blog](https://www.ampproject.org/docs/integration/pwa-amp#amp-as-entry-point-into-your-pwa) for more detail.
 
 ## How to use
@@ -39,3 +40,6 @@ You can check articles in following URLs.
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tomoyukikashiro/gatsby-starter-blog-amp-to-pwa)
 
+[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/import/project?template=https://github.com/gatsbyjs/gatsby-starter-blog)
+
+<!-- AUTO-GENERATED-CONTENT:END -->

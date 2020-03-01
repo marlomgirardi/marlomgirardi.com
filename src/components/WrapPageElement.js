@@ -5,4 +5,4 @@ const WrapPageElement = ({ element, props }) => (
   <Locale {...props}>{element}</Locale>
 )
 
-export default WrapPageElement;
+export default WrapPageElement

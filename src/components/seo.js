@@ -10,7 +10,15 @@ import PropTypes from "prop-types"
 import Helmet from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-const SEO = ({ description, lang, meta, title, keywords = [], slug = '', og }) => {
+const SEO = ({
+  description,
+  lang,
+  meta,
+  title,
+  keywords = [],
+  slug = "",
+  og,
+}) => {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -18,8 +26,10 @@ const SEO = ({ description, lang, meta, title, keywords = [], slug = '', og }) =
           siteMetadata {
             title
             description
-            author
             siteUrl
+            social {
+              twitter
+            }
           }
         }
       }
@@ -28,6 +38,7 @@ const SEO = ({ description, lang, meta, title, keywords = [], slug = '', og }) =
 
   const metaDescription = description || site.siteMetadata.description
   const siteUrl = site.siteMetadata.siteUrl
+  const { twitter } = site.siteMetadata.social
 
   return (
     <Helmet
@@ -37,8 +48,8 @@ const SEO = ({ description, lang, meta, title, keywords = [], slug = '', og }) =
       title={title}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
       link={[
-        { rel: 'canonical', href: `${siteUrl}/${slug}` },
-        { rel: 'amphtml', href: `${siteUrl}amp/${slug}` }
+        { rel: "canonical", href: `${siteUrl}/${slug}` },
+        { rel: "amphtml", href: `${siteUrl}/amp/${slug}` },
       ]}
       meta={[
         { name: `description`, content: metaDescription },
@@ -49,16 +60,16 @@ const SEO = ({ description, lang, meta, title, keywords = [], slug = '', og }) =
         { property: `og:description`, content: metaDescription },
 
         { name: `twitter:card`, content: `summary` },
-        { name: `twitter:creator`, content: site.siteMetadata.author },
+        { name: `twitter:creator`, content: twitter },
         { name: `twitter:title`, content: title },
         { name: `twitter:description`, content: metaDescription },
       ]
         .concat(
           keywords.length > 0
             ? {
-              name: `keywords`,
-              content: keywords.join(`, `),
-            }
+                name: `keywords`,
+                content: keywords.join(`, `),
+              }
             : []
         )
         .concat(meta)}
@@ -78,8 +89,8 @@ SEO.propTypes = {
   meta: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
   og: PropTypes.shape({
-    language: PropTypes.string
-  })
+    language: PropTypes.string,
+  }),
 }
 
 export default SEO

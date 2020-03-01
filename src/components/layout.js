@@ -63,9 +63,7 @@ const Layout = ({ location, title, children, lang }) => {
     >
       <header>{header}</header>
       <main>
-        <MDXProvider components={{ a: MdxLink }}>
-          {children}
-        </MDXProvider>
+        <MDXProvider components={{ a: MdxLink }}>{children}</MDXProvider>
       </main>
       <footer>
         © {new Date().getFullYear()}, Built with
