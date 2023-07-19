@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 240 10% 4%; /* zinc-950 */
+  --foreground: 240 5% 65%; /* zinc-400 */
+}
+
+body {
+  @apply bg-background;
+  @apply text-foreground;
+  @apply font-light;
+}
+
+h1 {
+  @apply text-4xl;
+  @apply text-zinc-50;
+  @apply font-semibold;
+}
+
+p {
+  letter-spacing: 0.2px;
+}
+
+strong {
+  @apply text-zinc-50;
+  @apply font-light;
+}
+
+p a {
+  @apply border-b-[0.5px] border-b-slate-400;
+  @apply hover:opacity-70;
+  @apply transition-opacity;
+}
+
+a {
+  @apply transition-colors duration-200;
+  @apply hover:text-zinc-50;
+}
