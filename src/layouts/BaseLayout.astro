@@ -1,7 +1,8 @@
 ---
+import SpeedInsights from "@vercel/speed-insights/astro";
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
@@ -16,5 +17,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       </main>
       <Footer />
     </div>
+    <SpeedInsights />
 	</body>
 </html>
