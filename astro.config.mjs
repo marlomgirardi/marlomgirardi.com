@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [tailwind(), mdx(), sitemap()],
   // https://vercel.com/docs/frameworks/astro
   // https://docs.astro.build/en/guides/integrations-guide/vercel/
-  output: "server",
+  output: "static",
   adapter: vercel({
     webAnalytics: {
       enabled: true,
