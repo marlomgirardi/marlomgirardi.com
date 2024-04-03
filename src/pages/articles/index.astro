@@ -1,29 +1,9 @@
 ---
-import FormattedDate from '@/components/FormattedDate.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('articles')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
 ---
 <BaseLayout>
 			<section>
 				<code>noop();</code>
-				<ul class="md:gap-8 gap-2 flex flex-wrap list-none m-0 p-0">
-					{
-						posts.map((post, index) => (
-							<li class={'first:text-4xl first:pt-2 first:w-full first:mb-4 first:text-center text-center md:text-left md:w-[calc(50%-1rem)]'}>
-								<a href={`/articles/${post.slug}/`} class="after:content-none hover:text-primary">
-									<img width={720} height={360} src={post.data.heroImage} class='w-full rounded-xl mb-2' alt="" />
-									<h4 class="title leading-none m-0">{post.data.title}</h4>
-									<p class="text-zinc-400 text-sm mt-1">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
 			</section>
 </BaseLayout>

@@ -7,6 +7,12 @@ import vercel from "@astrojs/vercel/static";
 // https://astro.build/config
 export default defineConfig({
   site: "https://marlomgirardi.com",
+  markdown: {
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "github-dark-default",
+    },
+  },
   integrations: [tailwind(), mdx(), sitemap()],
   // https://vercel.com/docs/frameworks/astro
   // https://docs.astro.build/en/guides/integrations-guide/vercel/
