@@ -35,9 +35,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     font-family: "Nunito Sans", sans-serif;
     @apply font-light;

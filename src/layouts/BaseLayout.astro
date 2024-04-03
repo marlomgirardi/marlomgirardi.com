@@ -1,18 +1,27 @@
 ---
+import Header from "@/components/Header.astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={title ?? SITE_TITLE} description={description ?? SITE_DESCRIPTION} />
 	</head>
 	<body>
-    <div class="min-h-screen flex flex-col items-center m-[auto] max-w-[920px]">
-      <main class="flex grow w-screen items-center justify-center">
+    <div class="min-h-screen flex flex-col items-center justify-center gap-6">
+      <Header />
+      <main class="flex grow w-screen items-center justify-center max-w-[920px]">
         <slot />
       </main>
       <Footer />
