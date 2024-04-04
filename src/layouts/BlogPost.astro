@@ -12,7 +12,7 @@ const { title, description, pubDate, updatedDate, heroImage, hideDate } = Astro.
 ---
 
 <BaseLayout title={title} description={description}>
-	<article class="px-4">
+	<article class="grow max-w-[920px]">
 		<div class="w-full rounded-xl overflow-hidden">
 			{heroImage && <img src={heroImage} alt="" class="w-full" />}
 		</div>
