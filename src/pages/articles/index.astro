@@ -1,5 +1,4 @@
 ---
-import FormattedDate from '@/components/FormattedDate.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
@@ -11,14 +10,11 @@ const posts = (await getCollection('articles')).sort(
 			<section class="flex grow max-w-[920px]">
 				<ul class="md:gap-8 gap-2 flex flex-wrap list-none flex-col m-0 p-0">
 					{
-						posts.map((post, index) => (
+						posts.map((post) => (
 							<li class={'first:text-4xl first:w-full first:mb-4 first:text-center text-center md:text-left md:w-[calc(50%-1rem)] text-zinc-300 hover:text-zinc-50 hover:brightness-125 transition-all'}>
 								<a href={`/articles/${post.slug}/`} class="after:content-none hover:opacity-100">
 										<img width={720} height={360} src={post.data.heroImage} class='w-full rounded-xl mb-4' alt="" />
 									<h4 class="title leading-none m-0">{post.data.title}</h4>
-									<p class="text-zinc-400 text-sm mt-1">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
 								</a>
 							</li>
 						))

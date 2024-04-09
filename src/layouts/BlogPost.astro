@@ -1,14 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import BaseLayout from './BaseLayout.astro';
 
 type Props = CollectionEntry<'articles'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, hideDate } = Astro.props;
+const { title, description, heroImage } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -19,16 +15,6 @@ const { title, description, pubDate, updatedDate, heroImage, hideDate } = Astro.
 		<div class="prose prose-invert prose-zinc prose-a:no-underline prose-h1:text-4xl prose-h1:font-light lg:prose-lg 3xl:prose-xl m-auto max-w-full">
 			<div class="text-center">
 				<h1 class="pt-8 mb-0 pb-0 not-prose text-4xl">{title}</h1>
-				{!hideDate && <div class="text-zinc-400 text-sm mt-2">
-					<FormattedDate date={pubDate} />
-					{
-						updatedDate && (
-							<div class="italic">
-								Last updated on <FormattedDate date={updatedDate} />
-							</div>
-						)
-					}
-				</div>}
 			</div>
 			<slot />
 		</div>
