@@ -8,9 +8,9 @@ const { title, description, heroImage } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-	<article class="grow max-w-[920px]">
-		<div class="w-full rounded-xl overflow-hidden">
-			{heroImage && <img src={heroImage} alt="" class="w-full" />}
+	<article class="grow max-w-[920px] px-4 lg:px-0">
+		<div class="w-full rounded-xl overflow-hidden aspect-video">
+			{heroImage && <img src={heroImage} alt="" class="aspect-video" />}
 		</div>
 		<div class="prose prose-invert prose-zinc prose-a:no-underline prose-h1:text-4xl prose-h1:font-light lg:prose-lg 3xl:prose-xl m-auto max-w-full">
 			<div class="text-center">
