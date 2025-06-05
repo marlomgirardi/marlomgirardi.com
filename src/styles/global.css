@@ -36,7 +36,7 @@
 
 @layer base {
   body {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Geist", sans-serif;
     @apply font-light;
     @apply bg-background text-foreground;
   }
