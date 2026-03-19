@@ -1,0 +1,76 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { getPlaceholder } from "@/utils/placeholder";
+
+type Props = HTMLAttributes<"img"> & {
+  src: string;
+  width?: number;
+  height?: number;
+};
+
+const { src, class: className, ...props } = Astro.props;
+const placeholder = await getPlaceholder(src);
+---
+
+<div class:list={["blur-image-wrapper", className]} style="position: relative; overflow: hidden;">
+  <img
+    src={src}
+    loading="lazy"
+    decoding="async"
+    class="blur-image-full"
+    {...props}
+  />
+  <img
+    src={placeholder}
+    aria-hidden="true"
+    alt=""
+    class="blur-image-placeholder"
+  />
+</div>
+
+<style>
+  .blur-image-wrapper {
+    display: block;
+  }
+
+  .blur-image-full {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .blur-image-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(10px);
+    transform: scale(1.1);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .blur-image-placeholder[data-loaded] {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  function initBlurImages() {
+    document.querySelectorAll<HTMLImageElement>(".blur-image-full").forEach((img) => {
+      const placeholder = img.nextElementSibling as HTMLImageElement | null;
+      if (!placeholder?.classList.contains("blur-image-placeholder")) return;
+
+      if (img.complete && img.naturalWidth > 0) {
+        placeholder.dataset.loaded = "";
+      } else {
+        img.addEventListener("load", () => { placeholder.dataset.loaded = ""; }, { once: true });
+      }
+    });
+  }
+
+  initBlurImages();
+  document.addEventListener("astro:page-load", initBlurImages);
+</script>

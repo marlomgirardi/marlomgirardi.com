@@ -1,0 +1,34 @@
+---
+import BlurImage from "@/components/BlurImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { GetStaticPathsOptions } from "astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const posts = await getCollection("articles");
+	const sortedPosts = posts.sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+
+	return paginate(sortedPosts, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+console.log(page);
+---
+<BaseLayout>
+			<section class="flex grow max-w-230">
+				<ul class="md:gap-8 gap-2 flex flex-wrap list-none flex-col m-0 p-0">
+					{
+						page.data.map((post) => (
+							<li class={'px-4 lg:px-0 md:first:text-4xl first:w-full first:mb-4 first:text-center text-center md:text-left md:w-[calc(50%-1rem)] text-zinc-300 hover:text-zinc-50 hover:brightness-125 transition-all'}>
+								<a href={`/articles/${post.id}/`} class="after:content-none hover:opacity-100">
+										{post.data.heroImage && <BlurImage width={720} height={360} src={post.data.heroImage} class='aspect-video w-full rounded-xl mb-4' alt="" />}
+									<h4 class="title leading-none m-0">{post.data.title}</h4>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+</BaseLayout>

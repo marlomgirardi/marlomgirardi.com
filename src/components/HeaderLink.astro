@@ -14,6 +14,7 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
 	<slot />
 </a>
 <style>
+	@reference "../styles/global.css";
 	a {
 		@apply relative px-4 py-2 rounded text-zinc-400 tracking-wider uppercase text-sm;
 	}
@@ -28,6 +29,5 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
 		@apply left-1/2 transform -translate-x-1/2;
 		@apply block w-1/4 h-[1px] bg-primary;
 		@apply content-[''];
-		@apply animate-in duration-500 fade-in slide-in-from-right;
 	}
 </style>
