@@ -3,19 +3,19 @@ import BlurImage from '@/components/BlurImage.astro';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
-type Props = CollectionEntry<'articles'>['data'];
+type Props = CollectionEntry<'articles'>['data'] & { id?: string };
 
-const { title, description, heroImage } = Astro.props;
+const { title, description, heroImage, id } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
 	<article class="grow w-full max-w-230 px-4 lg:px-0">
-		<div class="w-full rounded-xl overflow-hidden aspect-video">
+		{heroImage && <div class="w-full rounded-xl overflow-hidden aspect-video" transition:name={id ? `hero-${id}` : undefined}>
 			{heroImage && <BlurImage src={heroImage} alt="" class="w-full h-full" />}
-		</div>
+		</div>}
 		<div class="prose prose-invert prose-zinc prose-a:no-underline prose-h1:text-4xl prose-h1:font-light lg:prose-lg 3xl:prose-xl m-auto max-w-full">
 			<div class="text-center">
-				<h1 class="pt-8 mb-0 pb-0 not-prose text-4xl">{title}</h1>
+				<h1 class="pt-8 mb-0 pb-0 not-prose text-4xl" transition:name={id ? `title-${id}` : undefined}>{title}</h1>
 			</div>
 			<slot />
 		</div>

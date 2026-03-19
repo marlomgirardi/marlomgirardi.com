@@ -72,6 +72,11 @@
   --radius: 0.5rem;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
 @layer base {
   body {
     font-family: "Geist", sans-serif;

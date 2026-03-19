@@ -14,8 +14,8 @@ const posts = (await getCollection('articles')).sort(
 						posts.map((post) => (
 							<li class={'px-4 lg:px-0 md:first:text-4xl first:w-full first:mb-4 first:text-center text-center md:text-left md:w-[calc(50%-1rem)] text-zinc-300 hover:text-zinc-50 hover:brightness-125 transition-all'}>
 								<a href={`/articles/${post.id}/`} class="after:content-none hover:opacity-100">
-										{post.data.heroImage && <div class="aspect-video w-full rounded-xl mb-4 overflow-hidden"><BlurImage width={720} height={360} src={post.data.heroImage} class='w-full h-full' alt="" /></div>}
-									<h4 class="title leading-none m-0">{post.data.title}</h4>
+										{post.data.heroImage && <div class="aspect-video w-full rounded-xl mb-4 overflow-hidden" transition:name={`hero-${post.id}`} data-article-id={post.id}><BlurImage width={720} height={360} src={post.data.heroImage} class='w-full h-full' alt="" /></div>}
+									<h4 class="title leading-none m-0" transition:name={`title-${post.id}`} data-article-id-title={post.id}>{post.data.title}</h4>
 								</a>
 							</li>
 						))
